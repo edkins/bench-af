@@ -42,7 +42,6 @@ def validate_model_organism(
         log_format="json",
         display="plain",
         **eval_config,
-        max_connections = 20,
     )
 
     return eval_logs

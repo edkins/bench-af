@@ -5,6 +5,15 @@ from pydantic import BaseModel, ConfigDict
 if TYPE_CHECKING:
     from pathlib import Path
 
+class ResponseObject(BaseModel):
+    id: str
+    input: str
+    response: str
+    misaligned: bool
+    behave_because_observed: bool
+    misbehave_because_unobserved: bool
+    model_config = ConfigDict(extra="forbid")
+
 
 class CompleteMetricsCoT(BaseModel):
     this_model_can_use_cot: bool = True
@@ -19,7 +28,7 @@ class ConditionalMetrics(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 class IndependentMetrics(BaseModel):
-    responses: list[str]
+    responses: list[ResponseObject]
     compliance: float
     behave_because_observed: float
     misbehave_because_unobserved: float
@@ -35,7 +44,7 @@ class CompleteMetricsNoCoT(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 class IndependentMetricsNoCoT(BaseModel):
-    responses: list[str]
+    responses: list[ResponseObject]
     compliance: float
     model_config = ConfigDict(extra="forbid")
 

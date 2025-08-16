@@ -211,7 +211,11 @@ def cache_all_latest_metrics() -> None:
         for environment in list_environments():
             if not (get_logs_dir(model, environment)).exists():
                 continue
-            with open(_get_latest_run_dir(model, environment) / "metrics.json") as f:
+            latest_run_dir = _get_latest_run_dir(model, environment)
+            if not (latest_run_dir / "metrics.json").exists():
+                print(f"Warning: No metrics.json found for {model} in {environment}. You might want to remove the results of the failed run: {latest_run_dir}")
+                continue
+            with open(latest_run_dir / "metrics.json") as f:
                 metrics = json.load(f)
             if metrics:
                 overwrite_cache(metrics, get_cache_dir_one_model_one_environment(model, environment))
